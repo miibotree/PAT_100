@@ -1,78 +1,88 @@
 //PAT_1024 Palindromic Number
-//miibotree
+//Miibotree
 //2015.1.8
 
 #include <stdio.h>
-#include <math.h>
+#include <string.h>
 
-int Judge(int n);
-int Add(int *n);
+int Revserse(char *str, char *rev_str);
+int Add(char *str, char *rev_str);
+int Judge(char *str);
 
 int main()
 {
-	int n = 0;
-	int k = 0, i = 0;
-	while (scanf("%d%d", &n, &k) != EOF)
+	char str[256];
+	char rev_str[256];
+	int k = 0;
+	while(scanf("%s %d", str, &k) != EOF)
 	{
-		i = 0;
-		if (Judge(n))
-		{
-			printf("%d\n%d\n", n, i);
-			continue;
-		}
+		memset(rev_str, 0, 256);
+
+		if (Judge(str))//输入的数字直接就是回文数
+			printf("%s\n0\n", str);
 		else
 		{
-			for (i = 1; i <= k; i++)
+			for (int i = 1; i <= k; i++)
 			{
-				Add(&n);
-				if (Judge(n))
+				memset(rev_str, 0, 256);
+				Revserse(str, rev_str);
+				Add(str, rev_str);
+				if (i == k)//turn到了不管是不是回文数都要输出
+					printf("%s\n%d\n", str, k);
+				else if (Judge(str))//是回文数
 				{
-					printf("%d\n%d\n", n, i);
+					printf("%s\n%d\n", str, i);
 					break;
 				}
-				else if (i == k)
-					printf("%d\n%d\n", n, i);
 			}
-		}	
+		}
+
 
 	}
 	return 0;
 }
 
-int Judge(int n)//判断回文数
+int Revserse(char *str, char *rev_str)
 {
-	int cnt = 0;
-	int a[1000];
+	int len = strlen(str);
+	for (int i = 0; i < len; i++)
+		rev_str[i] = str[len - i - 1];
+	return 0;
+}
 
-	while (n)
+int Add(char *str, char *rev_str)
+{
+	int carry_flag = false;
+	int carry = 0;
+	int len = strlen(str);
+	for (int i = len - 1; i >= 0; i--)
 	{
-		a[cnt] = n % 10;
-		n = n / 10;
-		cnt++;
+		str[i] = str[i] + rev_str[i] - '0' + carry;
+		if (str[i] - '0' >= 10)//说明出现了进位
+		{
+			str[i] -= 10;
+			carry = 1;
+		} 
+		else
+			carry = 0;
 	}
-	for (int i = 0; i < cnt; i++)
+	if (carry == 1)//最高位有进位
 	{
-		if (a[i] != a[cnt - i - 1])
+		for (int i = len; i > 0; i--)
+			str[i] = str[i - 1];
+		str[0] = '1';
+		str[len + 1] = 0;
+	}
+	return 0;
+}
+
+int Judge(char *str)
+{
+	int len = strlen(str);
+	for (int i = 0; i < len / 2; i++)
+	{
+		if(str[i] != str[len - i - 1])
 			return false;
 	}
-	return true;
-}
-
-int Add(int *n)
-{
-	int cnt = 0;
-	int a[1000];
-	int p = *n;
-	int reverse_n = 0;
-
-	while (p)
-	{
-		a[cnt] = p % 10;
-		p = p / 10;
-		cnt++;
-	}
-	for (int i = 0; i < cnt; i++)
-		reverse_n += a[i] * pow((double)10, cnt-i-1);
-	*n = *n + reverse_n;
-	return 0;
+	return true; 
 }
