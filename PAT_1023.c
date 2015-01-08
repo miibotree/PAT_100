@@ -1,88 +1,72 @@
-//PAT_1024 Palindromic Number
+//PAT_1023
 //Miibotree
 //2015.1.8
-
+//分析：字符串处理
 #include <stdio.h>
 #include <string.h>
 
-int Revserse(char *str, char *rev_str);
-int Add(char *str, char *rev_str);
-int Judge(char *str);
+int Add(char *str1, char *str2, int len1, int *carry_flag);
 
 int main()
 {
-	char str[256];
-	char rev_str[256];
-	int k = 0;
-	while(scanf("%s %d", str, &k) != EOF)
+	char str1[22], str2[22];
+	while(gets(str1))
 	{
-		memset(rev_str, 0, 256);
+		int str1_num[10] = {0}, str2_num[10] = {0};
+		int len1 = 0, len2 = 0;
+		int flag = true, carry_flag = false;
 
-		if (Judge(str))//输入的数字直接就是回文数
-			printf("%s\n0\n", str);
-		else
+		memset(str2, 0, 22);
+		len1= strlen(str1);
+		for (int i = 0; i < len1; i++)
 		{
-			for (int i = 1; i <= k; i++)
+			str1_num[str1[i] - '0']++;
+		}
+		Add(str1, str2, len1, &carry_flag);
+		if (carry_flag == true)//乘2之后有进位，位数肯定不一样了
+		{
+			printf("No\n");
+			printf("1");
+			puts(str2);
+		}
+		else//没有进位
+		{
+			len2= strlen(str2);
+			for (int i = 0; i < len2; i++)
+				str2_num[str2[i] - '0']++;
+			for (int i = 0; i < 10; i++)
 			{
-				memset(rev_str, 0, 256);
-				Revserse(str, rev_str);
-				Add(str, rev_str);
-				if (i == k)//turn到了不管是不是回文数都要输出
-					printf("%s\n%d\n", str, k);
-				else if (Judge(str))//是回文数
+				if (str1_num[i] != str2_num[i])
 				{
-					printf("%s\n%d\n", str, i);
+					flag = false;
 					break;
 				}
 			}
+			if (flag == true)
+				printf("Yes\n");
+			else
+				printf("No\n");
+			puts(str2);
 		}
-
-
 	}
 	return 0;
 }
 
-int Revserse(char *str, char *rev_str)
+int Add(char *str1, char *str2, int len1, int *carry_flag)
 {
-	int len = strlen(str);
-	for (int i = 0; i < len; i++)
-		rev_str[i] = str[len - i - 1];
-	return 0;
-}
-
-int Add(char *str, char *rev_str)
-{
-	int carry_flag = false;
-	int carry = 0;
-	int len = strlen(str);
-	for (int i = len - 1; i >= 0; i--)
+	int carry = 0;//表示进位
+	for (int i = len1 - 1; i >= 0; i--)
 	{
-		str[i] = str[i] + rev_str[i] - '0' + carry;
-		if (str[i] - '0' >= 10)//说明出现了进位
+		str2[i] = str1[i] + str1[i] - '0' + carry;
+		if (str2[i] - '0' >= 10)//说明有进位
 		{
-			str[i] -= 10;
 			carry = 1;
-		} 
+			str2[i] = str2[i] - 10;
+		}
 		else
 			carry = 0;
 	}
-	if (carry == 1)//最高位有进位
-	{
-		for (int i = len; i > 0; i--)
-			str[i] = str[i - 1];
-		str[0] = '1';
-		str[len + 1] = 0;
-	}
+	if(carry == 1)
+		*carry_flag = true;
 	return 0;
-}
-
-int Judge(char *str)
-{
-	int len = strlen(str);
-	for (int i = 0; i < len / 2; i++)
-	{
-		if(str[i] != str[len - i - 1])
-			return false;
-	}
-	return true; 
 }
