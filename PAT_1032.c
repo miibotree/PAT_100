@@ -1,4 +1,4 @@
-//PAT_1032. Sharing (24/25)
+//PAT_1032. Sharing (25)
 //Miibotree
 //2015.1.17
 
@@ -23,7 +23,6 @@ int main()
 
 	while (scanf("%d %d %d", &addr1, &addr2, &n) != EOF)
 	{
-
 		for (int i = 0; i < n; i++)
 		{
 			scanf("%d %c %d", &addr, &data, &next);
@@ -45,20 +44,20 @@ int main()
 			while (diff--)
 				addr2 = LinkList[addr2].Next;
 		}
-		while (LinkList[addr1].Next != -1)
+		int flag = 0;
+		while (addr1 != -1)//注意这里的结束条件 一开始写成了LinkList[addr]->next != -1 导致有一个case没有通过
 		{
 			if (addr1 == addr2)
 			{
-				printf("%05d\n", addr1);
+				flag = 1;
 				break;
 			}
-			else
-			{
-				addr1 = LinkList[addr1].Next;
-				addr2 = LinkList[addr2].Next;
-			}
+			addr1 = LinkList[addr1].Next;
+			addr2 = LinkList[addr2].Next;
 		}
-		if (LinkList[addr1].Next == -1)
+		if (flag == 1)
+			printf("%05d\n", addr1);
+		else
 			printf("-1\n");
 	}
 	return 0;
@@ -66,6 +65,8 @@ int main()
 
 int Length(int addr)
 {
+	if (addr == -1)
+		return 0;
 	int cnt = 1;
 	while (LinkList[addr].Next != -1)
 	{
