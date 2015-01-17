@@ -1,4 +1,4 @@
-//PAT_1086. Tree Traversals Again (9/25 segment fault)
+//PAT_1086. Tree Traversals Again (25)
 //Miibotree
 //2015.1.16
 //思路：由前序遍历和中序遍历确定一颗二叉树，然后输出后序遍历
@@ -37,9 +37,9 @@ int main()
 	{
 		loc = 0;
 		while(s.empty() == false) s.pop();
-		for (int i = 0; i < n; i++)
-			prenum[i] = i+1;
+
 		int cnt = 0;
+		int cnt2 = 0;
 		getchar();
 		for (int i = 1; i <= 2*n; i++)
 		{
@@ -47,6 +47,7 @@ int main()
 			if (!strcmp(str, "Push"))
 			{
 				scanf("%d", &a);
+				prenum[cnt2++] = a;//注意前序遍历(push的顺序)可能不是按照1-N的顺序来的
 				s.push(a);
 			}
 			else if(!strcmp(str, "Pop"))
