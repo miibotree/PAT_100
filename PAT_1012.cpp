@@ -1,11 +1,13 @@
-//PAT_1012.The Best Rank (23/25)
+//PAT_1012.The Best Rank (25)
 //Miibotree
 //2015.1.18
-//碰到了这个奇葩的问题。。。去掉注释就是段错误。。。
+//注意并列排名的处理
+
 #include <stdio.h>
 #include <algorithm>
 
 using namespace std;
+#define MAX 2005
 
 struct Info1{
   int C;
@@ -13,19 +15,19 @@ struct Info1{
   int E;
   int A;
   int ID;
-}s1[1000001];
+}s1[MAX];
 
 struct Info2{
-  //int C;
+  int C;
   int Crank;
- // int M;
+  int M;
   int Mrank;
- // int E;
+  int E;
   int Erank;
- // int A;
+  int A;
   int Arank;
   int flag;
-}s2[1000001];
+}s2[1000000];
 
 bool cmp1(Info1 x, Info1 y)
 {
@@ -56,7 +58,7 @@ int main()
 
   while (scanf("%d%d", &n ,&m) != EOF)
   {
-    for (int i = 0; i < 1000000; i++)
+    for (int i = 0; i < 1000000; i++)//用的时候才分配内存
     s2[i].flag = 0;
 
     int studentID, Cscore, Mscore, Escore, Ascore;
@@ -71,32 +73,72 @@ int main()
     }
 
     sort(s1, s1+n, cmp1);
-    for(int i = 0; i < n; i++)
+    int rr = 1;
+  s2[s1[0].ID].Arank = 1;
+  s2[s1[0].ID].flag = 1;
+    for(int i = 1; i < n; i++)
+    {
+    s2[s1[i].ID].flag = 1;
+    if (s1[i].A != s1[i-1].A)//跟上一个人的分数不同
     {
       s2[s1[i].ID].Arank = i+1;
-      //s2[s1[i].ID].A = s1[i].A;
-      s2[s1[i].ID].flag = 1;
+      rr = i+1;
+    }
+    else//跟上一个人的分数相同
+    {
+      s2[s1[i].ID].Arank = rr;
+    }
+      
     }
 
     sort(s1, s1+n, cmp2);
-    for(int i = 0; i < n; i++)
+    rr = 1;
+  s2[s1[0].ID].Crank = 1;
+    for(int i = 1; i < n; i++)
+    {
+    if (s1[i].C != s1[i-1].C)//跟上一个人的分数不同
     {
       s2[s1[i].ID].Crank = i+1;
-      //s2[s1[i].ID].C = s1[i].C;
+      rr = i+1;
+    }
+    else//跟上一个人的分数相同
+    {
+      s2[s1[i].ID].Crank = rr;
+    }
     }
 
-    sort(s1, s1+n, cmp3);
-    for(int i = 0; i < n; i++)
+  sort(s1, s1+n, cmp3);
+    rr = 1;
+  s2[s1[0].ID].Mrank = 1;
+    for(int i = 1; i < n; i++)
+    {
+    if (s1[i].M != s1[i-1].M)//跟上一个人的分数不同
     {
       s2[s1[i].ID].Mrank = i+1;
-      //s2[s1[i].ID].M = s1[i].M;
+      rr = i+1;
+    }
+    else//跟上一个人的分数相同
+    {
+      s2[s1[i].ID].Mrank = rr;
+    }
+      
     }
 
-    sort(s1, s1+n, cmp4);
-    for(int i = 0; i < n; i++)
+  sort(s1, s1+n, cmp4);
+    rr = 1;
+  s2[s1[0].ID].Erank = 1;
+    for(int i = 1; i < n; i++)
+    {
+    if (s1[i].E != s1[i-1].E)//跟上一个人的分数不同
     {
       s2[s1[i].ID].Erank = i+1;
-      //s2[s1[i].ID].E = s1[i].E;
+      rr = i+1;
+    }
+    else//跟上一个人的分数相同
+    {
+      s2[s1[i].ID].Erank = rr;
+    }
+      
     }
 
     for (int i = 0; i < m; i++)
