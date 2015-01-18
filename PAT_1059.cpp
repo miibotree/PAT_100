@@ -21,7 +21,7 @@ void init()
 		if (mark[i] == true)
 			continue;
 		prime[primeSize++] = i;
-		if (i >= 1000)
+		if (i >= 1000)	//这里自己不是很清楚，但是去掉这个if之后程序崩溃
 			continue;
 		for(int j = i * i; j <= MAX; j+=i)
 			mark[j] = true;
@@ -38,7 +38,7 @@ int main()
 		int ansPrime[40];
 		int ansSize = 0;
 		int ansNum[40];
-		if (n == 1)
+		if (n == 1)//特殊处理1
 		{
 			printf("1=1\n");
 			continue;
