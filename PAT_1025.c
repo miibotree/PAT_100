@@ -1,7 +1,6 @@
 //PAT_1025. PAT Ranking (25)
 //Miibotree
 //2015.1.19
-
 #include <stdio.h>
 #include <algorithm>
 #include <string.h>
