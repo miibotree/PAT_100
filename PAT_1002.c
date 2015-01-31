@@ -1,6 +1,8 @@
 //PAT 1002
 //Miibotree
 //2015.1.5
+//2015.1.31 modified
+
 #include <stdio.h>
 
 int main()
@@ -32,39 +34,16 @@ int main()
 
 		for (i = 0; i < 1001; i++)
 			{if (sum[i] != 0)	count++;}
-		printf("%d ", count);
+		printf("%d", count);
 
-		if (count == 1)
+		for(i = 1001; i >= 0; i--)
 		{
-			for (i = 1000; i >=0; i--)
+			if(sum[i] != 0)
 			{
-				if (sum[i] != 0)
-				{
-					printf("%d %.1f\n", i, sum[i]);
-					break;
-				}
-			}
-		}
-		else{
-			for (i = 1000; i >=0 && count > 1; i--)
-			{
-				if (sum[i] != 0)
-				{
-					printf("%d %.1f ", i, sum[i]);
-					count--;
-				}
-			}
-
-			for (; i >= 0; i--)
-			{
-				if (sum[i] != 0)
-				{
-					printf("%d %.1f\n", i, sum[i]);
-					break;
-				}
-			}
+				count--;
+				printf(count == 0?" %d %.1f\n":" %d %.1f",i,sum[i]);
+			}	
 		}
 	}
-
-
+	return 0;
 }
