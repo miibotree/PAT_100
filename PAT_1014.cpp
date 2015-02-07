@@ -1,4 +1,4 @@
-//PAT_1014.Waiting in Line
+//PAT_1014.Waiting in Line (19/30)
 //Miibotree
 //2015.2.5
 // 模拟题
@@ -69,9 +69,14 @@ int main()
 							Customer[i].finish = true;
 							window[Customer[i].q].pop();//把最先进入队列的人弹出来
 							w_num[Customer[i].q]--;
+							if(w_num[Customer[i].q] > 0)
+							{
+								Customer[window[Customer[i].q].front()].hour = h;
+								Customer[window[Customer[i].q].front()].minute = mm;
+							}
 						}
 					}
-					else//还没入队列
+					else if(Customer[i].flag == false && Customer[i].finish == false)//还没入队列
 					{
 						//找到排队人数最少的队列
 						int cur = 1, min = m;
@@ -107,17 +112,31 @@ int main()
 				}
 			}
 		}
-
-		//如果队列还有非空，则可以继续处理
-		for(int j = 1; j <= n; j++)//队首的处理时间加1
+		
+		
+		//如果队列还有非空，则继续处理队首
+		for(int j = 1; j <= n; j++)
 		{
 			if(window[j].empty() == false)
 			{
-				int f = window[j].front();
-				Customer[f].spend++;
+				int f = window[j].front();//只处理队首
+				if(Customer[f].finish == false && Customer[f].spend > 1)
+				{
+					Customer[f].finish = true;
+					int still = Customer[f].serve_time - Customer[f].spend+1;
+
+					Customer[f].spend = Customer[f].serve_time;
+					Customer[f].minute += still;
+					if(Customer[f].minute >= 60)
+					{
+						Customer[f].hour += Customer[f].minute / 60;
+						Customer[f].minute = Customer[f].minute % 60;
+					}
+					
+				}
 			}	
 		}
-
+		
 		for(int i = 1; i <= q; i++)
 		{
 			int x;
