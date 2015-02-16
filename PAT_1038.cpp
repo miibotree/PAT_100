@@ -11,10 +11,7 @@ using namespace std;
 
 bool cmp(string a, string b)
 {
-	if (a < b)
-		return true;
-	else if(a > b)
-		return false;
+	return a+b < b+a;//这里利用了string的重载符+，判断ab和ba的大小
 }
 
 int n;
@@ -32,8 +29,22 @@ int main()
 			a[i] = str;
 		}
 		sort(a, a+n, cmp);
+		int flag = 0;
 		for(int i = 0; i < n; i++)
-			printf("%s", a[i].c_str());
+		{
+			for(int j = 0; j < a[i].size(); j++)
+			{
+				if(a[i][j] == '0' && flag == 0)
+					;
+				else
+				{
+					printf("%c", a[i][j]);
+					flag = 1;
+				}
+			}
+		}
+		if (flag == 0)
+			printf("0");
 		printf("\n");
 	}
 	return 0;
