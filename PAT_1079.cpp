@@ -1,7 +1,7 @@
 //PAT_1079. Total Sales of Supply Chain (23/25)
 //Miibotree
 //2015.2.18
-//无论是递归版本还是非递归版本最后一个case都超时
+//无论是递归版本还是非递归版本最后一个case都超时,时间复杂度为o(n^log(n))
 
 #include <stdio.h>
 #include <math.h>
