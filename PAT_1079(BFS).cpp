@@ -10,8 +10,8 @@
 using namespace std;
 
 struct Node{
-	int flag;
-	int amount;
+	//int flag;
+	double amount;
 	int level;
 	vector<int> c;
 }t[100010];
@@ -21,7 +21,7 @@ queue<Node> q;
 int main()
 {
 	int n;
-	double p, r, sum;
+	double p, r, sum = 0;
 	while(scanf("%d%lf%lf", &n, &p, &r) != EOF)
 	{
 		r /= 100;
@@ -31,8 +31,8 @@ int main()
 			scanf("%d", &x);
 			if(x == 0)//零售商
 			{
-				t[i].flag = 1;
-				scanf("%d", &t[i].amount);
+				//t[i].flag = 1;
+				scanf("%lf", &t[i].amount);
 			}
 			else//非零售商
 			{
@@ -48,7 +48,7 @@ int main()
 
 		q.push(t[0]);//根节点入队列
 		t[0].level = 0;
-		sum = 0.00;
+
 		while(q.empty() == false)
 		{
 
@@ -57,9 +57,11 @@ int main()
 			for(int i = 0; i < tmp.c.size(); i++)
 			{
 				t[tmp.c[i]].level = tmp.level + 1;
-				if(t[tmp.c[i]].flag == 1)
-					sum += t[tmp.c[i]].amount * p * pow(1 + r, t[tmp.c[i]].level);
-				q.push(t[tmp.c[i]]);
+				if(t[tmp.c[i]].c.size() == 0)
+				//if(t[tmp.c[i]].flag == 1)
+					sum += t[tmp.c[i]].amount * pow(1.0 + r, t[tmp.c[i]].level);
+				else
+					q.push(t[tmp.c[i]]);
 			}
 			/*
 			for(vector<int>::iterator it = t[tmp].c.begin(); it != t[tmp].c.end(); it++)
@@ -71,7 +73,7 @@ int main()
 			}
 			*/
 		}
-		printf("%.1f\n", sum);
+		printf("%.1f\n", sum * p);
 	}
 	return 0;
 }

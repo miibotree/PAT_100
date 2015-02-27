@@ -49,7 +49,7 @@ int main()
 
 		for(int i = 0; i < n; i++)
 		{
-			for(int j = 0; j < edge[i].size(); j++)
+			for(int j = 0; j < edge[newP].size(); j++)//当时这里写错了。。。好好反省
 			{
 				int t = edge[newP][j].next;
 				int c = edge[newP][j].c;
@@ -57,14 +57,14 @@ int main()
 				if(mark[t] == true)
 					continue;
 				if(dis[t] == -1 || dis[t] > dis[newP] + c ||
-					(dis[t] == dis[newP] + c && cost[t] > cost[newP] + co))
+					(dis[t] == dis[newP] + c && cost[t] > cost[newP] + co) )
 				{
 					dis[t] = dis[newP] + c;
 					cost[t] = cost[newP] + co;
 					path[t] = newP;
 				}
 			}
-			int min = 1<<30;
+			int min = 0x7fffffff;
 			for(int j = 0; j < n; j++)
 			{
 				if(mark[j] == true)

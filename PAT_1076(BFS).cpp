@@ -1,13 +1,14 @@
 //PAT_1076. Forwards on Weibo (30)
 //Miibotree
-//2015.2.22
-//图的深度遍历DFS
-
+//2015.2.27
+//BFS
 #include <stdio.h>
 #include <vector>
+#include <queue>
 using namespace std;
 
 vector<int> Edge[1001];
+queue<int> q;
 int flag[1001];
 int ans[1001];
 int sum;
@@ -19,7 +20,7 @@ void clear()
 		flag[i] = false;
 }
 
-void dfs(int x, int depth)
+void bfs(int x, int depth)
 {
 	if(depth > L)
 		return;
@@ -52,7 +53,7 @@ int main()
 		{
 			clear();
 			sum = 0;
-			dfs(i, 0);
+			bfs(i, 0);
 			ans[i] = sum - 1;
 		}
 

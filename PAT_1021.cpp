@@ -93,14 +93,15 @@ int main()
 	{
 		DFS(1,1,-1);
 		Ans = temp;
+		temp.clear();
 		DFS(Ans[0],1,-1);
 		for(int i = 0; i < temp.size(); i++)
 			Ans.push_back(temp[i]);
 		sort(Ans.begin(), Ans.end());
-		printf("%d\n", Ans[0]);//去重
+		printf("%d\n", Ans[0]);
 		for(int i = 1; i < Ans.size(); i++)
 		{
-			if(Ans[i] != Ans[i-1])
+			if(Ans[i] != Ans[i-1])//去重
 				printf("%d\n", Ans[i]);
 		}
 	}
