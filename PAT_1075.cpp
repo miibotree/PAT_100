@@ -58,7 +58,8 @@ int main()
 		{
 			for(int j = 1; j <= k; j++)
 			{
-				a[i].all_score += a[i].score[j];
+				if(a[i].score[j] != -1)
+					a[i].all_score += a[i].score[j];
 			}
 		}
 		sort(a+1, a+n+1, cmp);

@@ -7,7 +7,13 @@
 #include <queue>
 using namespace std;
 
-vector<int> Edge[1001];
+struct Edge
+{
+	int id;
+	int level;
+};
+
+vector<Edge> edge[1001];
 queue<int> q;
 int flag[1001];
 int ans[1001];
@@ -22,15 +28,29 @@ void clear()
 
 void bfs(int x, int depth)
 {
-	if(depth > L)
-		return;
-	if(flag[x] == false)
+	while(q.empty() == false)	q.pop();
+	Edge start;
+	start.id = x;
+	start.level = 0;
+	q.push(start);
+	flag[start.id] = true;
+	while(!q.empty())
 	{
-		flag[x] = true;
-		sum++;
+		Edge top = q.front();
+		q.pop();
+		int u = top.id;
+		for(int i = 0; i < edge[u].size(); i++)
+		{
+			Edge next = edge[u][i];
+			next.level = top.level + 1;
+			if(flag[next.id] == false && edge[next.id].level <= L)
+			{
+				sum++;
+				flag[next.id] = true;
+				q.push(next);
+			}			
+		}
 	}
-	for(int i = 0; i < Edge[x].size(); i++)
-		dfs(Edge[x][i], depth + 1);
 }
 
 int main()
@@ -45,7 +65,9 @@ int main()
 			for(int j = 1; j <= cnt; j++)
 			{
 				scanf("%d", &v);
-				Edge[v].push_back(i);
+				Edge tmp;
+				tmp.id = i; 
+				edge[v].push_back(tmp);
 			}
 		}
 	
