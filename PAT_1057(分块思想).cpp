@@ -1,31 +1,55 @@
-//PAT_1057. Stack (25 / 30)
+//PAT_1057. Stack (30)
 //Miibotree
-//2015.2.20
-//2015.3.1 
-//即使用二分来做也会超时的
-
+//2015.3.2
+//分块思想
 #include <stdio.h>
 #include <stack>
-#include <vector>
 #include <algorithm>
+#define limit 317
 
 using namespace std;
 
 stack<int> s;
-vector<int>vi;
+int bucket[limit];
+int table[100001];
 
 void PeekMedian()
 {
-	int size = vi.size();
+	int size = vi.size();//获取中间位置size
 	if(size % 2 == 1)
 		size = (size + 1) / 2;
 	else
 		size = size / 2;
-	printf("%d\n", vi[size - 1]);
+
+	int sum = 0;
+	int idx = 0;
+	for(idx = 0; idx < limit; idx++)//寻找在那个bucket里面
+	{
+		if(sum + bucket[idx] < size)
+			sum += bucket[idx];
+		else
+			break;
+	}
+	//找到了bucket，再遍历table找到对应的下标
+	idx = idx * limit;//当前块的第一个数字
+	while(1)
+	{
+		sum += table[idx];
+		if(sum >= size)
+		{
+			printf("%d\n", idx);
+			break;
+		}
+		else
+			idx++;
+	}	
 }	
 
 int main()
 {
+	memset(bucket, 0, limit);
+	memset(table, 0, 100001);
+
 	int n;
 	scanf("%d", &n);
 	getchar();
@@ -40,7 +64,8 @@ int main()
 			case 'u'://push 
 				sscanf(cmd, "%s%d", str, &key);
 				s.push(key);
-				vi.insert(lower_bound(vi.begin(), vi.end(), key), key);
+				table[key]++;
+				bucket[key / limit]++;
 			break;
 
 			case 'o'://pop
@@ -50,7 +75,8 @@ int main()
 				{
 					int x = s.top();
 					s.pop();
-					vi.erase(lower_bound(vi.begin(), vi.end(), x));
+					table[x]--;
+					bucket[x / limit]--;
 					printf("%d\n", x);
 				}
 				break;
