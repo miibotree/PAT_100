@@ -1,4 +1,4 @@
-//PAT_1026. Table Tennis (30)
+//PAT_1026. Table Tennis (20 / 30)
 //Miibotree
 //2015.3.2
 //这道题目的逻辑很复杂，细节地方必须注意好
