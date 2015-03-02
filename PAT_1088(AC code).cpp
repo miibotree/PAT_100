@@ -1,9 +1,12 @@
-//PAT_1088. Rational Arithmetic (14 / 20)
+//PAT_1088. Rational Arithmetic (20)
 //Miibotree
 //2015.3.2
 //学习分数的表示方法和四则运算法则
+//#include <stdlib.h>
+//#include <math.h>下面的abs和C++ Algorithm下面的abs函数不一样么？？
 #include <stdio.h>
 #include <algorithm>
+using namespace std;
 
 struct Fraction{
 	long long up;
