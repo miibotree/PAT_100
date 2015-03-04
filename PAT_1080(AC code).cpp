@@ -1,132 +1,102 @@
-//PAT_1088. Rational Arithmetic (20)
+//14年考研真题
+//1080. Graduate Admission (30)
 //Miibotree
-//2015.3.2
-//学习分数的表示方法和四则运算法则
+//2015.3.4
+//结构体排序加模拟
 #include <stdio.h>
 #include <algorithm>
+#include <set>
+#include <vector>
+using namespace std;
 
-struct Fraction{
-	long long up;
-	long long down;
-}a, b;
+int quota[101];
+int cnt[101];
+vector<int> result[101];
 
-long long gcd(long long a, long long b)
+struct student{
+	int id;
+	int GE;
+	int GI;
+	int AVG;
+	int rank;
+	int choice[6];
+}stu[40001];
+
+bool cmp(student a, student b)
 {
-	if (b == 0)
-		return a;
-	else
-		return gcd(b, a % b);
+	if(a.AVG != b.AVG)
+		return a.AVG > b.AVG;
+	else 
+		return a.GE > b.GE;//注意这里如果没有写好的话有一组数据会超时
+ 
 }
-
-//1.如果分母为负，则分子和分母各取相反数
-//2.如果分子为零，另分母为1，表示整数
-//3.如果分子分母存在约数，约去最大公约数
-Fraction Reduction(Fraction result)
-{
-	if(result.down < 0)
-	{
-		result.up = -result.up;
-		result.down = -result.down;
-	}
-	if(result.up == 0)
-		result.down = 1;
-	else
-	{
-		int d= gcd(abs(result.up), result.down);
-		result.up /= d;
-		result.down /= d;
-	}
-	return result;
-}
-
-Fraction Add(Fraction f1, Fraction f2)
-{
-	Fraction result;
-	result.down = f1.down * f2.down;
-	result.up = f1.up * f2.down + f1.down * f2.up;
-	return Reduction(result);
-}
-
-Fraction Minus(Fraction f1, Fraction f2)
-{
-	Fraction result;
-	result.down = f1.down * f2.down;
-	result.up = f1.up * f2.down - f1.down * f2.up;
-	return Reduction(result);
-}
-
-
-Fraction Multi(Fraction f1, Fraction f2)
-{
-	Fraction result;
-	result.down = f1.down * f2.down;
-	result.up = f1.up * f2.up;
-	return Reduction(result);
-}
-
-
-Fraction Divide(Fraction f1, Fraction f2)
-{
-	Fraction result;
-	result.down = f1.down * f2.up;
-	result.up = f1.up * f2.down;
-	return Reduction(result);
-}
-
-
-void Print(Fraction r)
-{
-	r = Reduction(r);
-	if(r.up < 0)
-		printf("(-");
-	if(r.down == 1)//整数
-		printf("%lld", abs(r.up));
-	else if(abs(r.up) > r.down)//假分数
-		printf("%lld %lld/%lld", abs(r.up) / r.down, abs(r.up) % r.down, r.down);
-	else
-		printf("%lld/%lld", abs(r.up), r.down);
-	if(r.up < 0)
-		printf(")");
-}
-
 
 int main()
 {
-	scanf("%lld/%lld %lld/%lld", &a.up, &a.down, &b.up, &b.down);
-	//Add
-	Print(a);
-	printf(" + ");
-	Print(b);
-	printf(" = ");
-	Print(Add(a, b));
-	printf("\n");
-
-	//Minus
-	Print(a);
-	printf(" - ");
-	Print(b);
-	printf(" = ");
-	Print(Minus(a, b));
-	printf("\n");
-
-	//Muitl
-	Print(a);
-	printf(" * ");
-	Print(b);
-	printf(" = ");
-	Print(Multi(a, b));
-	printf("\n");
-
-	//Divide
-	Print(a);
-	printf(" / ");
-	Print(b);
-	printf(" = ");
-	if(b.up == 0)
-		printf("Inf");
-	else
-		Print(Divide(a, b));
-	printf("\n");
-
-	return 0;
+	//freopen("C:\\Users\\miibotree\\Desktop\\in.txt", "r", stdin);
+	int n, m, k;
+	scanf("%d%d%d", &n, &m, &k);
+	for(int i = 0; i < m; i++)
+	{
+		int number;
+		scanf("%d", &number);
+		quota[i] = number;
+	}
+	for(int i = 0; i < n; i++)
+	{
+		scanf("%d %d", &stu[i].GE, &stu[i].GI);
+		stu[i].id = i;
+		stu[i].AVG = (stu[i].GE + stu[i].GI) / 2;
+		for(int j = 0; j < k; j++)
+			scanf("%d", &stu[i].choice[j]);
+	}
+	sort(stu, stu + n, cmp);
+	//calu rank
+	int rank = 1;
+	stu[0].rank = 1;
+	for(int i = 1; i < n; i++)
+	{
+		if(stu[i].AVG == stu[i - 1].AVG && stu[i].GE == stu[i - 1].GE)
+			stu[i].rank = rank;
+		else
+		{
+			stu[i].rank = i + 1;
+			rank = i + 1;
+		}
+	}
+	int pre_school = -1;//记录前一个人进的是哪个学校
+	for(int i = 0; i < n; i++)//按照排名录取
+	{
+		for(int j = 0; j < k; j++)
+		{
+			int school = stu[i].choice[j];
+			int flag = 0;
+			if (cnt[school] < quota[school])
+				flag = 1;
+			
+			else if(cnt[school] >= quota[school] && stu[i].rank == stu[i - 1].rank && school == pre_school)	
+				flag = 1;
+			if(flag == 1)
+			{
+				result[school].push_back(stu[i].id);
+				cnt[school]++;
+				pre_school = school;
+				break;
+			}
+		}
+	}
+	for(int i = 0; i < m; i++)
+	{
+		int j = 0;
+		
+		if(result[i].size() == 0)
+			printf("\n");
+		else
+		{
+			sort(result[i].begin(), result[i].end());
+			for(j = 0; j < result[i].size() - 1; j++)
+				printf("%d ", result[i][j]);
+			printf("%d\n", result[i][j]);
+		}
+	}
 }
