@@ -37,7 +37,7 @@ void Dijkstra(int s)
 			int c = edge[newP][j].c;
 			if(mark[t] == true)
 				continue;
-			if(Dis[t] == -1 || Dis[newP] + c < Dis[t])//这里的条件不要遗漏
+			if(Dis[t] == -1 || Dis[newP] + c < Dis[t])
 			{
 				num[t] = num[newP];
 				w[t] = w[newP] + weight[t];
@@ -53,7 +53,7 @@ void Dijkstra(int s)
 		int min = 0x3fffffff;
 		for(int j = 0; j < n; j++)
 		{
-			if(Dis[j] == -1 || mark[j] == true)//这里的代码也不要遗漏
+			if(Dis[j] == -1 || mark[j] == true)
 				continue;
 
 			if(Dis[j] < min)

@@ -17,14 +17,14 @@ struct Node{
 
 bool judge(Node a)
 {
-	if(a.x <= 0 || a.y <= 0 || a.z <= 0 || a.x > l || a.y > m || a.z > n)
+	if(a.x <= 0 || a.y <= 0 || a.z <= 0 || a.x > m || a.y > n || a.z > l)
 		return false;
 	if(inq[a.x][a.y][a.z] == true || maze[a.x][a.y][a.z] == 0)
 		return false;
 	return true;
 }
 
-int BFS(int x, int y, int z)
+int BFS(int z, int x, int y)
 {
 	int sum = 0;
 	queue<Node> q;
@@ -32,12 +32,11 @@ int BFS(int x, int y, int z)
 	tmp.x = x; tmp.y = y; tmp.z = z; 
 	q.push(tmp);
 	inq[x][y][z] = true;
-	
+	sum++;
 	while(q.empty() == false)
 	{
 		Node top = q.front();
 		q.pop();
-		sum++;
 		for(int i = 0; i < 6; i++)
 		{
 			Node newPos;
@@ -48,6 +47,7 @@ int BFS(int x, int y, int z)
 			{
 				q.push(newPos);
 				inq[newPos.x][newPos.y][newPos.z] = true;
+				sum++;
 			}
 		}	
 	}
@@ -56,7 +56,7 @@ int BFS(int x, int y, int z)
 
 int main()
 {
-	//freopen("C:\\Users\\miibotree\\Desktop\\in.txt", "r", stdin);
+	freopen("C:\\Users\\miibotree\\Desktop\\in.txt", "r", stdin);
 	scanf("%d%d%d%d", &m, &n, &l, &t);
 	for(int i = 1; i <= l; i++)
 	{

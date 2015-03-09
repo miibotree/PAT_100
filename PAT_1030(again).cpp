@@ -1,33 +1,30 @@
-//PAT_1003. Emergency (25)
+//PAT_1030. Travel Plan (30)
 #include <stdio.h>
 #include <vector>
-#include <algorithm>
 #define N 501
 using namespace std;
 
 struct Edge
 {
 	int next;
+	int cost;
 	int c;
 };
 vector<Edge> edge[N];
-
-int n, m, s, t;
-int Dis[N], weight[N], w[N], mark[N], num[N];
+int Dis[N], Cost[N], mark[N], pre[N];
+int s, t, n, m;
 
 void Dijkstra(int s)
 {
 	for(int i = 0; i < n; i++)
 	{
 		Dis[i] = -1;
-		w[i] = 0;
+		Cost[i] = 0;
 		mark[i] = false;
-		num[i] = 0;
+		pre[i] = i;
 	}
 	Dis[s] = 0;
-	w[s] = weight[s];
 	mark[s] = true;
-	num[s] = 1;
 	int newP = s;
 	for(int i = 0; i < n; i++)
 	{
@@ -35,27 +32,26 @@ void Dijkstra(int s)
 		{
 			int t = edge[newP][j].next;
 			int c = edge[newP][j].c;
+			int cost = edge[newP][j].cost;
 			if(mark[t] == true)
 				continue;
-			if(Dis[t] == -1 || Dis[newP] + c < Dis[t])//这里的条件不要遗漏
+			if(Dis[t] == -1 || Dis[newP] + c < Dis[t])
 			{
-				num[t] = num[newP];
-				w[t] = w[newP] + weight[t];
 				Dis[t] = Dis[newP] + c;
+				Cost[t] = Cost[newP] + cost;
+				pre[t] = newP;
 			}
-			else if(Dis[newP] + c == Dis[t])
+			else if(Dis[newP] + c == Dis[t] && Cost[newP] + cost < Cost[t])
 			{
-				num[t] += num[newP];
-				if(w[newP] + weight[t] > w[t])
-					w[t] = w[newP] + weight[t];
+				Cost[t] = Cost[newP] + cost;
+				pre[t] = newP;
 			}
 		}
 		int min = 0x3fffffff;
 		for(int j = 0; j < n; j++)
 		{
-			if(Dis[j] == -1 || mark[j] == true)//这里的代码也不要遗漏
+			if(mark[j] == true || Dis[j] == -1)
 				continue;
-
 			if(Dis[j] < min)
 			{
 				min = Dis[j];
@@ -66,23 +62,34 @@ void Dijkstra(int s)
 	}
 }
 
+void PrintPath(int v)
+{
+	if(v == s)
+	{
+		printf("%d\n", s);
+		return 0;
+	}
+	PrintPath(pre[v]);
+	printf("%d ", v);
+}
+
 int main()
 {
 	scanf("%d%d%d%d", &n, &m, &s, &t);
-	for(int i = 0; i < n; i++)
-		scanf("%d", &weight[i]);
 	while(m--)
 	{
-		int c1, c2, c;
-		scanf("%d%d%d", &c1, &c2, &c);
+		int c1, c2, d, c;
+		scanf("%d%d%d%d", &c1, &c2, &d, &c);
 		Edge tmp;
-		tmp.c = c;
+		tmp.c = d;
+		tmp.cost = c;
 		tmp.next = c1;
 		edge[c2].push_back(tmp);
 		tmp.next = c2;
 		edge[c1].push_back(tmp);
 	}
 	Dijkstra(s);
-	printf("%d %d\n", num[t], w[t]);
+	PrintPath(t);//递归输出的
+	printf("%d %d\n", Dis[t], Cost[t]);
 	return 0;
 }
