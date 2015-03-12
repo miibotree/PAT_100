@@ -18,7 +18,7 @@ int main()
 		for(int i = 0; i < k; i++)
 		{
 			temp = 0;
-			for(int j = i; j < n; j++)
+			for(int j = i; j < k; j++)
 			{
 				temp += a[j];
 				if(temp > sum)
@@ -30,9 +30,9 @@ int main()
 			}
 		}
 		if(sum < 0)
-			printf("0 %d %d\n", a[0], a[n-1]);
+			printf("0 %d %d\n", a[0], a[k-1]);
 		else
-			printf("%d %d %d\n", sum, begin, end);
+			printf("%d %d %d\n", sum, a[begin], a[end]);
 	}
 	return 0;
 }

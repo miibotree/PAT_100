@@ -9,10 +9,11 @@ struct Node
 	int level;
 	int id;
 };
-Node tree[MAXN];
-int cnt[MAXN];
-int maxLevel = 0;
-void BFS()//序号进入队列就好了
+
+vector<Node> tree[MANX];
+int cnt[MANX];
+
+void BFS()//区号进入队列就好了
 {
 	tree[1].level = 1;
 	queue<int> q;
@@ -21,17 +22,15 @@ void BFS()//序号进入队列就好了
 	{
 		int idx = q.front();
 		int nowLevel = tree[idx].level;
-		if(nowLevel > maxLevel)//注意必须是加在这里的，否则叶子节点所在的深度可能会没有被计算进去
-			maxLevel = nowLevel;
 		q.pop();
 		//判断当前节点是不是叶子节点
-		if(tree[idx].c.size() == 0)//是叶子节点
-			cnt[nowLevel]++;
+		if(tree[idx].child.size() == 0)//是叶子节点
+			cnt[tree[idx].level]++;
 		else//不是叶子节点，所有的孩子节点入队列
 		{
-			for(int i = 0; i < tree[idx].c.size(); i++)
+			for(int i = 0; i < tree[idx].child.size(); i++)
 			{
-				int next = tree[idx].c[i];
+				int next = tree[idx].child[i];
 				tree[next].level = nowLevel + 1;
 				q.push(next);
 			}
@@ -59,12 +58,10 @@ int main()
 		}
 	}
 	BFS();
-	for(int i = 1; i <= maxLevel; i++)
+	for(int i = 1; i <= n; i++)
 	{
 		if(i != 1)
 			printf(" ");
 		printf("%d", cnt[i]);
 	}
-	printf("\n");
-	return 0;
 }
