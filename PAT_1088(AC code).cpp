@@ -22,7 +22,7 @@ long long gcd(long long a, long long b)
 }
 
 //1.如果分母为负，则分子和分母各取相反数
-//2.如果分子为零，另分母为1，表示整数
+//2.如果分子为零，另分母为1，表示0
 //3.如果分子分母存在约数，约去最大公约数
 Fraction Reduction(Fraction result)
 {

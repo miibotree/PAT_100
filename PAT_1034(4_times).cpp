@@ -41,8 +41,8 @@ void DFS(int x, int &head, int &totalWeight, int &gangNum)
 	for(int i = 0; i < edge[x].size(); i++)
 	{
 		int idx = edge[x][i].next;
-		totalWeight += edge[x][i].w;
-		if(visit[idx] == false)
+		totalWeight += edge[x][i].w;//这里先累加边权
+		if(visit[idx] == false)//然后再考虑递归的问题
 			DFS(idx, head, totalWeight, gangNum);
 	}
 }

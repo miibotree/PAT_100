@@ -79,11 +79,11 @@ void DFS(int v)
 			path = tempPath;
 		}
 		tempPath.pop_back();
-		return ;
+		return ;//注意这里DFS必有有递归出口
 	}
 	tempPath.push_back(v);
 	for(int i = 0; i < pre[v].size(); i++)
-		DFS(pre[v][i]);
+		DFS(pre[v][i]);//递归入口
 	tempPath.pop_back();
 }
 
